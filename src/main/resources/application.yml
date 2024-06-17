@@ -1,0 +1,16 @@
+spring:
+  config:
+    import: classpath:env.properties
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ToDoList
+    username: postgres
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  application:
+    name: ToDoList
+  sql:
+    init:
+      mode: always
+
+server:
+  port : 8888
