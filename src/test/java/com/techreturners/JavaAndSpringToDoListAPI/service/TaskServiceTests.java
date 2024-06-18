@@ -9,9 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.util.Lists.list;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -53,5 +52,16 @@ public class TaskServiceTests {
         var tasks = taskService.viewAllTasks();
         //Assert
         assertThat(tasks).isEmpty();
+    }
+
+    @Test
+    public void shouldAddNewTaskToDB() {
+        //Arrange
+        var mockTask = Task.of("Gardening", false);
+        when(mockRepository.save(mockTask)).thenReturn(mockTask);
+        //Act
+        var task = taskService.addTask(mockTask);
+        //Assert
+        assertEquals(task.description(), "Gardening");
     }
 }
