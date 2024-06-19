@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.techreturners</groupId>
 	<artifactId>JavaAndSpringToDoListAPI</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>JavaAndSpringToDoListAPI</name>
 	<description>Spring Boot project for ToDo List API Project</description>
 	<properties>
