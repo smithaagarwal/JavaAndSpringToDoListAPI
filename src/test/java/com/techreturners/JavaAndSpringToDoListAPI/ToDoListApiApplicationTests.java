@@ -1,6 +1,6 @@
 package com.techreturners.JavaAndSpringToDoListAPI;
 
-import com.techreturners.JavaAndSpringToDoListAPI.model.Task;
+import com.techreturners.JavaAndSpringToDoListAPI.domain.Task;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

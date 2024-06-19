@@ -1,7 +1,8 @@
 package com.techreturners.JavaAndSpringToDoListAPI.service;
 
+import com.techreturners.JavaAndSpringToDoListAPI.exceptions.TaskNotFoundException;
 import com.techreturners.JavaAndSpringToDoListAPI.exceptions.TenOrMoreIncompleteTaskException;
-import com.techreturners.JavaAndSpringToDoListAPI.model.Task;
+import com.techreturners.JavaAndSpringToDoListAPI.domain.Task;
 import com.techreturners.JavaAndSpringToDoListAPI.repository.TaskRepository;
 import org.assertj.core.util.Streams;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,5 +111,19 @@ public class TaskServiceTests {
         assertEquals(task.description(), mockTaskWithUpdatedDetails.description());
     }
 
+    @Test
+    public void shouldThrowExceptionWhenTaskIDForUpdateIsNotFound() {
+        //Arrange
+        var invalidTaskID = 7L;
+        var mockTaskWithUpdatedDetails = new Task(1L, "Bake cake", true, 1);
+        when(mockRepository.findById(invalidTaskID)).thenThrow(new TaskNotFoundException(invalidTaskID));
+        when(mockRepository.save(mockTaskWithUpdatedDetails)).thenReturn(mockTaskWithUpdatedDetails);
+
+        //Act
+        var re = assertThrows(TaskNotFoundException.class, () -> taskService.editTaskDetails(invalidTaskID, mockTaskWithUpdatedDetails));
+
+        //Assert
+        assertEquals("The task with ID 7 was not found", re.getMessage());
+    }
 }
 

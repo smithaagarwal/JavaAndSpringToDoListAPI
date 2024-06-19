@@ -12,6 +12,18 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class TaskControllerAdvice {
+    @ExceptionHandler(TaskNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String taskNotFoundHandler(TaskNotFoundException ex) {
+        return ex.getMessage();
+    }
+
+    @ExceptionHandler(TenOrMoreIncompleteTaskException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String TenOrMoreIncompleteTaskHandler(TenOrMoreIncompleteTaskException ex) {
+        return ex.getMessage();
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleValidationExceptions(
