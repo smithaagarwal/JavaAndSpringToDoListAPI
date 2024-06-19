@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  application:
+    name: ToDoList
+  sql:
+    init:
+      mode: always
+
+server:
+  port: 8888
+
+max:
+  limit:
+    incomplete: 10
