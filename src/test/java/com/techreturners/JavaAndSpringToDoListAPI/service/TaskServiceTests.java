@@ -1,5 +1,6 @@
 package com.techreturners.JavaAndSpringToDoListAPI.service;
 
+import com.techreturners.JavaAndSpringToDoListAPI.exceptions.TenOrMoreIncompleteTaskException;
 import com.techreturners.JavaAndSpringToDoListAPI.model.Task;
 import com.techreturners.JavaAndSpringToDoListAPI.repository.TaskRepository;
 import org.assertj.core.util.Streams;
@@ -75,7 +76,7 @@ public class TaskServiceTests {
         when(mockRepository.save(mockTaskToAdd)).thenReturn(mockTaskToAdd);
 
         //Act Assert
-        var re = assertThrows(RuntimeException.class, () -> taskService.addTask(mockTaskToAdd));
+        var re = assertThrows(TenOrMoreIncompleteTaskException.class, () -> taskService.addTask(mockTaskToAdd));
         assertEquals("Please complete existing tasks before adding new ones", re.getMessage());
     }
 

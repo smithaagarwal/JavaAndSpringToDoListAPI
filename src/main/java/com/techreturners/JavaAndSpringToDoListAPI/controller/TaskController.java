@@ -2,6 +2,7 @@ package com.techreturners.JavaAndSpringToDoListAPI.controller;
 
 import com.techreturners.JavaAndSpringToDoListAPI.model.Task;
 import com.techreturners.JavaAndSpringToDoListAPI.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +26,7 @@ public class TaskController {
 
     @PostMapping(value = "tasks", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Task addTask(@RequestBody Task task) {
+    public Task addTask(@Valid @RequestBody Task task) {
         return taskService.addTask(task);
     }
 
@@ -36,7 +37,7 @@ public class TaskController {
     }
 
     @PutMapping("tasks/{taskid}")
-    public Task editTask(@PathVariable Long taskid, @RequestBody Task task) {
+    public Task editTask(@PathVariable Long taskid, @Valid @RequestBody Task task) {
         return taskService.editTaskDetails(taskid, task);
     }
 

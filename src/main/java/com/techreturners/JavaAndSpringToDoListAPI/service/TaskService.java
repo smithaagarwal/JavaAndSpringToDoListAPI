@@ -1,5 +1,7 @@
 package com.techreturners.JavaAndSpringToDoListAPI.service;
 
+import com.techreturners.JavaAndSpringToDoListAPI.exceptions.TaskNotFoundException;
+import com.techreturners.JavaAndSpringToDoListAPI.exceptions.TenOrMoreIncompleteTaskException;
 import com.techreturners.JavaAndSpringToDoListAPI.model.Task;
 import com.techreturners.JavaAndSpringToDoListAPI.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class TaskService {
         var noOfIncompleteTasks = StreamSupport.stream(allTasks.spliterator(), true).filter(t -> !t.isComplete()).toList().size();
 
         if (noOfIncompleteTasks >= maxLimit) {
-            throw new RuntimeException("Please complete existing tasks before adding new ones");
+            throw new TenOrMoreIncompleteTaskException();
         }
         return taskRepository.save(task);
     }
@@ -42,7 +44,7 @@ public class TaskService {
         return taskRepository.findById(taskId).map(existingTask -> {
             var taskToUpdate = new Task(existingTask.id(), task.description(), task.isComplete(), existingTask.version());
             return taskRepository.save(taskToUpdate);
-        }).orElseThrow();
+        }).orElseThrow(() -> new TaskNotFoundException(taskId));
     }
 
 }
