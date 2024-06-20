@@ -1,5 +1,9 @@
 _How to run locally_
 
+Create a .env.properties file in the resources folder, with the db credentials
+DB_USER=dbusername
+DB_PASS=password
+
 Open a terminal and cd into project directory
 
 - `mvn clean package`
