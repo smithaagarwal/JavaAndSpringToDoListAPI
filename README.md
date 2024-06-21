@@ -1,7 +1,7 @@
 ## ToDoList REST API 
 
 
-The project is developed using Spring Boot. There are end points for 
+The project is developed using Spring Boot. There are REST endpoints for 
 - getting all the tasks that is persisted
 - adding a new task 
 - editing the task description and complete status
@@ -35,18 +35,40 @@ _How to debug in Intellij community edition_
 
 ## Design decisions
 
-- Decouple domain object from request and response object:
-This struck me after I had setup swagger and I was looking at the documentation generated. Gor the request and response parameters, I saw all the fields of Task object was sent. But as per the logic I did not need to send all the fields of Task. Hence I thought for it to align with the correct requirement, it will be best to decouple the domain object from the request and response object.
+- Decouple `domain object` from request and response object:
+
+    Initially I had just the domain object. But after the OpenAPI documentation via Swagger I realised that contract is not well-defined. 
+At first I added `@JsonIgnore` on the domain object field to hide the internal field from Response. But that breaks the Single Responsibility Principle.
+So I decoupled the domain object from Request and Response objects.
+
 
 - Immutability and Java Records :
-Immutability: Spring Data JDBC promotes the use of immutable entities.
-Java Records: Ideal for modeling entities because they are immutable by design and have an all-args constructor that the framework can utilize for object population.
 
-I used this book for reference: Cloud Native Spring In Action, Thomas Vitale
+    Immutability: `Spring Data JDBC` promotes the use of immutable entities.
+`Java Records`: Ideal for modeling entities because they are immutable by design and have an all-args constructor that the framework can utilize for object population.
+PS: `JPA` does not work with Records as it requires mutability
 
-- Store the max limit of incomplete tasks in application.yml and injected it through the constructor:
-Injection through constructor enables the value being available for running the tests
-Storing the constant in a yml file enables changing this number in the future without modifying the code.
 
-- Used CORS configuration:
-This is not a secure way. But as the webclient was hosted on a different domain I was getting CORS error. Hence I have set the configuration such that the client is able to connect to the server.
+- Construction Injection using `@Value` annotation
+
+    Store the max limit of incomplete tasks in application.yml and injected it through the constructor.
+  Injection of value via Constructor allows the entity to be correctly unit tested. Injecting the value on a private member variable did not let me test the functionality. 
+  Storing the constant in a yml file enables changing this number in the future without modifying the code.
+
+
+- Used `CORS` configuration:
+
+    Since the webclient is hosted on a different domain it resulted in CORS error. 
+Hence, I have set up the Spring CORS configuration such that the client is able to connect to the server (both hosted on different domains).
+TODO: Make it more secure.
+
+
+- Using Spring Profile
+
+    I initially wrote all the code by running the DB locally on my machine. Once I moved to Docker container, I saw my integration tests started failing.
+This allowed me to think and segregate the runtime configuration of my application such that Integration Tests only run in local. I used Spring profiles
+to conditionally load the class. I made a local and docker profile. I added the `@ActiveProfiles` annotation on my integration test class.
+
+    TODO: I should enhance the local profile to connect to a postgres container rather than a locally running instance and use `TestContainers`
+
+Reference: I used this book - `Cloud Native Spring In Action, Thomas Vitale`
